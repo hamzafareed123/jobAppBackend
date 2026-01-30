@@ -1,0 +1,26 @@
+export interface ITodo {
+  id: string;
+  userId:string;
+  todoName: string;
+  description?: string;
+  status: "pending" | "completed" | "canceled";
+  createdAt:Date;
+  updatedAt:Date,
+}
+
+
+export interface ICreateTodoBody {
+    
+    todoName:string,
+    description?:string
+}
+
+export interface IUpdatedTodoBody{
+    todoName?:string,
+    description?:string
+}
+
+
+
+
+
