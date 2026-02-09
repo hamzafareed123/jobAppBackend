@@ -73,16 +73,18 @@ const SidebarContent = ({
       </button>
     </div>
 
-    <div className="mb-4">
-      <button
-        onClick={() => handleTabClick("tasks")}
-        className={`w-full flex items-center gap-3 p-3 rounded-lg transition cursor-pointer
+    {user?.role === "user" && (
+      <div className="mb-4">
+        <button
+          onClick={() => handleTabClick("tasks")}
+          className={`w-full flex items-center gap-3 p-3 rounded-lg transition cursor-pointer
         ${activeTab === "tasks" ? "bg-[#296374] text-gray-100" : "hover:text-gray-50 text-gray-400"}`}
-      >
-        <CheckSquare size={20} />
-        <span className="text-lg font-medium">Tasks</span>
-      </button>
-    </div>
+        >
+          <CheckSquare size={20} />
+          <span className="text-lg font-medium">Tasks</span>
+        </button>
+      </div>
+    )}
 
     {user?.role === "admin" && (
       <div>
