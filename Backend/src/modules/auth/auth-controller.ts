@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from "express";
-import { ISignInBody, ISignUpBody } from "../types/user.types";
+import { ISignInBody, ISignUpBody } from "../../types/user.types";
 import {
   signUpUser,
   signInUser,
   fetchAllUser,
-} from "../services/user.services";
-import { SUCCESS_MESSAGE } from "../constants/successMessages";
-import { OutputHandler } from "../middleware/outputHandler";
-import { customError } from "../utils/customError";
-import { ERROR_MESSAGE } from "../constants/errorMessages";
+} from "./auth-services";
+import { SUCCESS_MESSAGE } from "../../constants/successMessages";
+import { OutputHandler } from "../../middleware/outputHandler";
+import { customError } from "../../utils/customError";
+import { ERROR_MESSAGE } from "../../constants/errorMessages";
 
 export const SignUp = async (
   req: Request,

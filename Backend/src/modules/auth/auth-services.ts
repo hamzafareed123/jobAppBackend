@@ -1,11 +1,11 @@
-import { ERROR_MESSAGE } from "../constants/errorMessages";
-import { IUserDocument, User } from "../models/User";
-import { ISignInBody, ISignUpBody, IUser } from "../types/user.types";
+import { ERROR_MESSAGE } from "../../constants/errorMessages";
+import { IUserDocument, User } from "../../models/user-models";
+import { ISignInBody, ISignUpBody, IUser } from "../../types/user.types";
 import bcrypt from "bcrypt";
-import { mapUser } from "../utils/mapUser";
-import { findUserByEmail, createUser,findAllUser } from "../repositories/user.repositories";
-import { customError } from "../utils/customError";
-import { generateToken } from "../utils/jwtToken";
+import { mapUser } from "../../utils/mapUser";
+import { findUserByEmail, createUser,findAllUser } from "./auth-repositories";
+import { customError } from "../../utils/customError";
+import { generateToken } from "../../utils/jwtToken";
 import { Response } from "express";
 
 export const signUpUser = async (

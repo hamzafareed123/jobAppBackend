@@ -1,5 +1,5 @@
-import { User } from "../models/User";
-import { ISignUpBody } from "../types/user.types";
+import { User } from "../../models/user-models";
+import { ISignUpBody } from "../../types/user.types";
 
 export const findUserByEmail = async (email: string) => {
   return await User.findOne({ email });

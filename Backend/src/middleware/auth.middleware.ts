@@ -3,7 +3,7 @@ import { customError } from "../utils/customError";
 import { ERROR_MESSAGE } from "../constants/errorMessages";
 import jwt from "jsonwebtoken";
 import { ENV } from "../config/env";
-import { findUserByID } from "../repositories/user.repositories";
+import { findUserByID } from "../modules/auth/auth-repositories";
 import { IUser } from "../types/user.types";
 
 declare global {
