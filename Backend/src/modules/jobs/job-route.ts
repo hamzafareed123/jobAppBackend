@@ -13,6 +13,6 @@ router.use(Limiter);
 router.post("/", createJob);
 router.get("/", getAllJobs);
 router.get("/:jobId", getJobById);
-router.patch("/:jobId/job-info", uploadJobDoc.single("document"), saveJobInfo);
+router.patch("/:jobId/job-info", uploadJobDoc.single("descriptionFile"), saveJobInfo);
 
 export default router;

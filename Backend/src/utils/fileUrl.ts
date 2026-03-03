@@ -1,10 +1,10 @@
 import { ENV } from "../config/env";
+import { Request } from "express";
 
-export const generatFileUrl = (filePath: any, req: any) => {
+export const generateFileUrl = (filePath: any, req: Request) => {
   if (!filePath) {
     return null;
   }
 
-  const baseUrl = ENV.BASE_URL || `${req.protocol}://${req.get("host")}`;
-  return `${baseUrl}${filePath}`;
+  return `${req.protocol}://${req.get("host")}/files/${filePath}`;
 };
