@@ -16,7 +16,7 @@ export const STATUS_CODE = {
   NOT_FOUND: 404,             // resource does not exist
   CONFLICT: 409,
   UNSUPPORTED_MEDIA_TYPE:415,              // duplicate — e.g. email already exists
-  UNPROCESSABLE: 422,         // validation failed
+  UNPROCESSABLE: 422,         
   TOO_MANY_REQUESTS: 429,     // rate limit exceeded
 
   //  Server Errors 
