@@ -4,6 +4,7 @@ import { OutputHandler } from "../../middleware/outputHandler";
 import { STATUS_CODE } from "../../constants/statusCode";
 import { ICreateJobDTO, ISaveJobInfoDTO } from "../../types";
 import { SUCCESS_MESSAGE } from "../../constants/successMessages";
+import { generateFileUrl } from "../../utils/fileUrl";
 
 export const createJob = async (
   req: Request,
@@ -86,12 +87,14 @@ export const saveJobInfo = async (
     const jobId = req.params.jobId as string;
     const userId = (req.user as any).id;
     const data = req.body as ISaveJobInfoDTO;
+    
 
     console.log("data is ", data);
 
     if (req.file) {
-      data.descriptionFile = req.file.filename;
+      data.descriptionFile = generateFileUrl(req.file.filename, req)
     }
+
 
     const job = await jobServices.saveJobInfo(data, jobId, userId);
 

@@ -72,7 +72,7 @@ export interface ISaveJobInfoDTO {
   location?: string;
   jobSummary?: string;
   descriptionText?: string;
-  descriptionFile?: string;
+  descriptionFile?: string | null;
 }
 
 export interface ISaveAssessmentDTO {
