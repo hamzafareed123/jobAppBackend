@@ -1,4 +1,6 @@
 export const ERROR_MESSAGE = {
+  //auth
+
   USER_NOT_FOUND: "User Not Found",
   USER_ALREADY_EXIST: "User already exist with this email",
   SERVER_ERROR: "Server Error",
@@ -9,4 +11,9 @@ export const ERROR_MESSAGE = {
   ADMIN_ACCESS: "Unauthorized Only Admin can access",
   FORBIDDEN: "Forbidden",
   USERID_NOT_FOUND: "User Id not Found",
+  TOO_MANY_REQUEST: "Too many requests, please try again later",
+
+  // job
+
+  JOB_NOT_FOUND: "No Job Exist",
 };
