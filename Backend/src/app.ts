@@ -1,25 +1,31 @@
 import express from "express";
 import { ENV } from "./config/env";
-import userRouter from "./routes/user.routes";
+import userRouter from "../src/modules/auth/auth.routes";
+import jobRouter from "../src/modules/jobs/job-route";
 import { dbConnect } from "./config/db";
 import { OutputHandler } from "./middleware/outputHandler";
 import cookieParser from "cookie-parser";
-import cors from "cors"
+import cors from "cors";
+import path from "path";
 
 dbConnect();
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
+app.use(cookieParser());
 
-app.use(cors({
-  origin:ENV.CLIENT_URL,
-  credentials:true,
-}))
+app.use(
+  cors({
+    origin: ENV.CLIENT_URL,
+    credentials: true,
+  }),
+);
 
 app.use("/auth", userRouter);
+app.use("/api/jobs", jobRouter);
 
+app.use("/files", express.static(path.join(__dirname, "../upload")));
 
 app.use((error: any, req: any, res: any, next: any) => {
   (res as any).error = error;

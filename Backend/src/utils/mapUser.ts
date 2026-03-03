@@ -1,4 +1,4 @@
-import { IUserDocument } from "../models/User";
+import { IUserDocument } from "../models/user-models";
 import { IUser } from "../types/user.types";
 
 export const mapUser = (user: IUserDocument): IUser => ({
@@ -6,6 +6,6 @@ export const mapUser = (user: IUserDocument): IUser => ({
   fullName: user.fullName,
   email: user.email,
   role: user.role,
-   createdAt:user.createdAt,
-    updatedAt:user.updatedAt,
+  createdAt: user.createdAt,
+  updatedAt: user.updatedAt,
 });
