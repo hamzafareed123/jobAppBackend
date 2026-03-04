@@ -2,7 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import { jobServices } from "./job-services";
 import { OutputHandler } from "../../middleware/outputHandler";
 import { STATUS_CODE } from "../../constants/statusCode";
-import { ICreateJobDTO, ISaveJobInfoDTO } from "../../types";
+import {
+  ICreateJobDTO,
+  IPublishJobDTO,
+  ISaveAssessmentDTO,
+  ISaveInterviewersDTO,
+  ISaveJobInfoDTO,
+  ISaveStagesDTO,
+} from "../../types";
 import { SUCCESS_MESSAGE } from "../../constants/successMessages";
 import { generateFileUrl } from "../../utils/fileUrl";
 
@@ -87,14 +94,10 @@ export const saveJobInfo = async (
     const jobId = req.params.jobId as string;
     const userId = (req.user as any).id;
     const data = req.body as ISaveJobInfoDTO;
-    
-
-    console.log("data is ", data);
 
     if (req.file) {
-      data.descriptionFile = generateFileUrl(req.file.filename, req)
+      data.descriptionFile = generateFileUrl(req.file.filename, req);
     }
-
 
     const job = await jobServices.saveJobInfo(data, jobId, userId);
 
@@ -111,3 +114,140 @@ export const saveJobInfo = async (
     OutputHandler(status, req, res, next);
   }
 };
+
+export const saveAssessment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const jobId = req.params.jobId as string;
+    const userId = (req.user as any).id;
+    const data = req.body as ISaveAssessmentDTO;
+
+    const job = await jobServices.saveAssessment(data, jobId, userId);
+
+    (res as any).result = { data: job, message: "Assement and skills Saved" };
+
+    OutputHandler(STATUS_CODE.CREATED, req, res, next);
+  } catch (error) {
+    (res as any).error = error;
+    const status =
+      error instanceof Error && "statusCode" in error
+        ? (error as any).statusCode
+        : 500;
+
+    OutputHandler(status, req, res, next);
+  }
+};
+
+export const saveStages = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const jobId = req.params.jobId as string;
+    const userId = (req.user as any).id;
+    const data = req.body as ISaveStagesDTO;
+
+    const job = await jobServices.saveStages(data, jobId, userId);
+    (res as any).result = { data: job, message: "stages saved successfully" };
+
+    OutputHandler(STATUS_CODE.CREATED, req, res, next);
+  } catch (error) {
+    (res as any).error = error;
+    const status =
+      error instanceof Error && "statusCode" in error
+        ? (error as any).statusCode
+        : 500;
+
+    OutputHandler(status, req, res, next);
+  }
+};
+
+export const saveInterviewers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const jobId = req.params.jobId as string;
+    const userId = (req.user as any).id;
+    const data = req.body as ISaveInterviewersDTO;
+
+    const job = await jobServices.saveInterviewers(data, jobId, userId);
+    (res as any).result = {
+      data: job,
+      message: "Interviewers saved successfully",
+    };
+
+    OutputHandler(STATUS_CODE.CREATED, req, res, next);
+  } catch (error) {
+    (res as any).error = error;
+    const status =
+      error instanceof Error && "statusCode" in error
+        ? (error as any).statusCode
+        : 500;
+
+    OutputHandler(status, req, res, next);
+  }
+};
+
+export const publishJob = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const jobId = req.params.jobId as string;
+    const userId = (req.user as any).id;
+    const data = req.body as IPublishJobDTO;
+
+    const job = await jobServices.publishJob(data, jobId, userId);
+    (res as any).result = {
+      data: job,
+      message: "Job Successfully Publish",
+    };
+
+    OutputHandler(STATUS_CODE.CREATED, req, res, next);
+  } catch (error) {
+    (res as any).error = error;
+    const status =
+      error instanceof Error && "statusCode" in error
+        ? (error as any).statusCode
+        : 500;
+
+    OutputHandler(status, req, res, next);
+  }
+};
+
+export const deleteJob = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const jobId = req.params.jobId as string;
+    const userId = (req.user as any).id;
+
+    const job = await jobServices.deleteJob(jobId, userId);
+    (res as any).result = {
+      data: job,
+      message: "Job deleted Successfully ",
+    };
+
+    OutputHandler(STATUS_CODE.CREATED, req, res, next);
+  } catch (error) {
+    (res as any).error = error;
+    const status =
+      error instanceof Error && "statusCode" in error
+        ? (error as any).statusCode
+        : 500;
+
+    OutputHandler(status, req, res, next);
+  }
+};
+
+
+
