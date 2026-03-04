@@ -35,6 +35,7 @@ export interface IJob {
 
  
   assessmentId?: Types.ObjectId;
+  skillIds?: Types.ObjectId[];
 
 
   jobRequirements?: string;

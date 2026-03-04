@@ -4,7 +4,6 @@ export interface ISkill extends Document {
   name: string;
 }
 
-
 const SkillSchema = new Schema<ISkill>({
   name: {
     type: String,
