@@ -6,5 +6,7 @@ export const ENV = {
   MONGO_URL: process.env.MONGO_URL,
   JWT_SECRET: process.env.JWT_SECRET as string,
   CLIENT_URL: process.env.CLIENT_URL,
-  BASE_URL:process.env.BASE_URL
+  BASE_URL: process.env.BASE_URL,
+  GMAIL_USER: process.env.GMAIL_USER,
+  GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD,
 };

@@ -1,14 +1,22 @@
 import { NextFunction, Request, Response } from "express";
-import { ISignInBody, ISignUpBody } from "../../types/user.types";
+import {
+  IForgotPasswordBody,
+  IResetPasswordBody,
+  ISignInBody,
+  ISignUpBody,
+} from "../../types/user.types";
 import {
   signUpUser,
   signInUser,
   fetchAllUser,
+  forgotPasswordService,
+  resetPasswordService
 } from "./auth-services";
 import { SUCCESS_MESSAGE } from "../../constants/successMessages";
 import { OutputHandler } from "../../middleware/outputHandler";
 import { customError } from "../../utils/customError";
 import { ERROR_MESSAGE } from "../../constants/errorMessages";
+import { STATUS_CODE } from "../../constants/statusCode";
 
 export const SignUp = async (
   req: Request,
@@ -72,8 +80,10 @@ export const getAuthUser = async (
     OutputHandler(200, req, res, next);
   } catch (error) {
     (res as any).error = error;
-    const status = error instanceof Error && "statusCode" in error
-    ? (res as any).statusCode :  500;
+    const status =
+      error instanceof Error && "statusCode" in error
+        ? (res as any).statusCode
+        : 500;
     OutputHandler(status, req, res, next);
   }
 };
@@ -113,6 +123,55 @@ export const getAllUsers = async (
 
     (res as any).result = { data: user, message: "Request Successfull" };
     OutputHandler(200, req, res, next);
+  } catch (error) {
+    (res as any).error = error;
+    const status =
+      error instanceof Error && "statusCode" in error
+        ? (error as any).statusCode
+        : 500;
+
+    OutputHandler(status, req, res, next);
+  }
+};
+
+export const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const data: IForgotPasswordBody = req.body;
+
+    await forgotPasswordService(data);
+
+    (res as any).result = { data: null, message: SUCCESS_MESSAGE.OTP_SENT };
+    OutputHandler(STATUS_CODE.OK, req, res, next);
+  } catch (error) {
+    (res as any).error = error;
+    const status =
+      error instanceof Error && "statusCode" in error
+        ? (error as any).statusCode
+        : 500;
+
+    OutputHandler(status, req, res, next);
+  }
+};
+
+export const resetPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const data: IResetPasswordBody = req.body;
+
+    await resetPasswordService(data);
+
+    (res as any).result = {
+      data: null,
+      message: SUCCESS_MESSAGE.PASSWORD_RESET_SUCCESS,
+    };
+    OutputHandler(STATUS_CODE.OK, req, res, next);
   } catch (error) {
     (res as any).error = error;
     const status =
