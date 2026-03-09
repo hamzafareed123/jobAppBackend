@@ -12,6 +12,7 @@ export const ERROR_MESSAGE = {
   FORBIDDEN: "Forbidden",
   USERID_NOT_FOUND: "User Id not Found",
   TOO_MANY_REQUEST: "Too many requests, please try again later",
+  INVALID_OR_EXPIRED_OTP: "Invalid or expired OTP",
 
   // job
 

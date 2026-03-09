@@ -22,3 +22,14 @@ export interface IResponse {
   user: IUser;
   token: string;
 }
+
+export interface IForgotPasswordBody{
+  email:string
+}
+
+export interface IResetPasswordBody{
+  otp:string;
+  password:string,
+  confirmPassword:string,
+}
+

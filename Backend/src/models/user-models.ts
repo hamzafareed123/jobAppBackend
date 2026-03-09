@@ -1,16 +1,17 @@
-import mongoose, { Schema,Document,model} from "mongoose";
+import mongoose, { Schema, Document, model } from "mongoose";
 
-export interface IUserDocument  extends Document{
-    fullName:string,
-    email:string,
-    password:string,
-    profilePic?:string,
-    role:"user" | "admin",
-    provider:"local" | "google",
-    googleId?:string,
-    createdAt:Date,
-    updatedAt:Date,
-
+export interface IUserDocument extends Document {
+  fullName: string;
+  email: string;
+  password: string;
+  profilePic?: string;
+  role: "user" | "admin";
+  otp?: string;
+  otpExpire?: Date;
+  provider: "local" | "google";
+  googleId?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const userSchema = new Schema<IUserDocument>(
@@ -34,10 +35,20 @@ const userSchema = new Schema<IUserDocument>(
       type: String,
     },
 
-    role:{
-        type:String,
-        enum:["user","admin"],
-        default:"user"
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+
+    otp: {
+      type: String,
+      default: null,
+    },
+
+    otpExpire: {
+      type: Date,
+      default: null,
     },
 
     provider: {
@@ -53,6 +64,4 @@ const userSchema = new Schema<IUserDocument>(
   { timestamps: true },
 );
 
-export const User = model<IUserDocument>("User",userSchema)
-
-
+export const User = model<IUserDocument>("User", userSchema);
