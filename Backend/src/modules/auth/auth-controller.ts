@@ -10,7 +10,9 @@ import {
   signInUser,
   fetchAllUser,
   forgotPasswordService,
-  resetPasswordService
+  resetPasswordService,
+  logoutService,
+  refreshTokenService,
 } from "./auth-services";
 import { SUCCESS_MESSAGE } from "../../constants/successMessages";
 import { OutputHandler } from "../../middleware/outputHandler";
@@ -26,8 +28,11 @@ export const SignUp = async (
   try {
     const body: ISignUpBody = req.body;
 
-    const user = await signUpUser(body, res);
-    (res as any).result = { data: user, message: SUCCESS_MESSAGE.USER_CREATED };
+    const { accessToken, user } = await signUpUser(body, res);
+    (res as any).result = {
+      data: { user, accessToken },
+      message: SUCCESS_MESSAGE.USER_CREATED,
+    };
 
     OutputHandler(201, req, res, next);
   } catch (error) {
@@ -49,10 +54,10 @@ export const SignIn = async (
   try {
     const body: ISignInBody = req.body;
 
-    const user = await signInUser(body, res);
+    const { accessToken, user } = await signInUser(body, res);
 
     (res as any).result = {
-      data: user,
+      data: { user, accessToken },
       message: SUCCESS_MESSAGE.LOGIN_SUCCESSFUL,
     };
 
@@ -88,13 +93,14 @@ export const getAuthUser = async (
   }
 };
 
-export const Logout = (req: Request, res: Response, next: NextFunction) => {
+export const Logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    res.clearCookie("jwt", {
-      httpOnly: true,
-      sameSite: "lax",
-    });
-
+    const token = req.cookies.refreshToken;
+    await logoutService(token, res);
     (res as any).result = {
       data: null,
       message: SUCCESS_MESSAGE.LOGOUT_SUCCESSFUL,
@@ -170,6 +176,32 @@ export const resetPassword = async (
     (res as any).result = {
       data: null,
       message: SUCCESS_MESSAGE.PASSWORD_RESET_SUCCESS,
+    };
+    OutputHandler(STATUS_CODE.OK, req, res, next);
+  } catch (error) {
+    (res as any).error = error;
+    const status =
+      error instanceof Error && "statusCode" in error
+        ? (error as any).statusCode
+        : 500;
+
+    OutputHandler(status, req, res, next);
+  }
+};
+
+export const refreshToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const token = req.cookies.refreshToken;
+
+    const { accessToken } = await refreshTokenService(token);
+
+    (res as any).result = {
+      data: { accessToken: accessToken },
+      message: "Token is Refreshed",
     };
     OutputHandler(STATUS_CODE.OK, req, res, next);
   } catch (error) {
