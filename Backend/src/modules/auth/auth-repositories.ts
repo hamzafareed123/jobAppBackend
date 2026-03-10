@@ -1,4 +1,5 @@
 import { otpEmailTemplate } from "../../email/otpEmailTemplate";
+import { RefreshToken } from "../../models/refreshToken-model";
 import { User } from "../../models/user-models";
 import { ISignUpBody } from "../../types/user.types";
 import crypto from "crypto";
@@ -48,4 +49,16 @@ export const resetUserPassword = async (
     otp: null,
     otpExpire: null,
   });
+};
+
+export const findRefreshToken = async (token: string) => {
+  return await RefreshToken.findOne({ token });
+};
+
+export const deleteRefreshToken = async (token: string) => {
+  return await RefreshToken.deleteOne({ token });
+};
+
+export const deleteAllRefreshToken = async (userId: string) => {
+  return await RefreshToken.deleteMany({ userId });
 };

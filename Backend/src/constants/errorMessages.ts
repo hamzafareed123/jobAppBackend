@@ -14,6 +14,7 @@ export const ERROR_MESSAGE = {
   TOO_MANY_REQUEST: "Too many requests, please try again later",
   INVALID_OR_EXPIRED_OTP: "Invalid or expired OTP",
 
+
   // job
 
   JOB_NOT_FOUND: "No Job Exist",

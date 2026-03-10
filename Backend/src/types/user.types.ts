@@ -18,9 +18,9 @@ export interface ISignInBody {
   password: string;
 }
 
-export interface IResponse {
+export interface IAuthResponse {
   user: IUser;
-  token: string;
+  accessToken: string;
 }
 
 export interface IForgotPasswordBody{
