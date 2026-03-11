@@ -2,6 +2,7 @@ import { Job } from "../../models";
 import {
   IAssessment,
   ICreateJobDTO,
+  IGetAllJobResponse,
   IJob,
   IPublishJobDTO,
   ISaveAssessmentDTO,
@@ -23,10 +24,52 @@ export const jobRepository = {
     return job;
   },
 
-  async getAllJobs(userId: string): Promise<IJob[]> {
-    return await Job.find({ createdBy: userId })
-      .populate("assessmentId", "name")
-      .populate("skillIds", "name");
+  async getAllJobs(
+    userId: string,
+    status: string,
+    query: string,
+    page: string,
+    limit: string,
+  ): Promise<IGetAllJobResponse> {
+    const filter: any = {
+      createdBy: userId,
+      ...(status && { status: status }),
+      ...(query && {
+        $or: [
+          { jobTitle: { $regex: query, $options: "i" } },
+          { location: { $regex: query, $options: "i" } },
+          { "interviewers.role": { $regex: query, $options: "i" } },
+          ...(!isNaN(Number(query)) ? [{ noOfPositions: Number(query) }] : []),
+        ],
+      }),
+    };
+
+    const pageNum = Number(page) || 1;
+    const limitNum = Number(limit) || 10;
+
+    const skip = (pageNum - 1) * limitNum;
+
+    const [jobs, total] = await Promise.all([
+      Job.find(filter)
+        .populate("assessmentId", "name")
+        .populate("skillIds", "name")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limitNum),
+      Job.countDocuments(filter),
+    ]);
+
+    return {
+      jobs,
+       pagination: {
+        total,
+        page: pageNum,
+        limit: limitNum,
+        totalPages: Math.ceil(total / limitNum),
+        hasNextPage: pageNum < Math.ceil(total / limitNum),
+        hasPrevPage: pageNum > 1,
+      },
+    };
   },
 
   async getJobById(jobId: string, userId: string): Promise<IJob | null> {

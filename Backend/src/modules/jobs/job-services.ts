@@ -27,14 +27,9 @@ export const jobServices = {
     return job;
   },
 
-  async getAllJobs(userId: string) {
-    const jobs = await jobRepository.getAllJobs(userId);
+  async getAllJobs(userId: string,status:string,query:string,page:string,limit:string) {
+    return  await jobRepository.getAllJobs(userId,status,query,page,limit);
 
-    if (jobs.length === 0) {
-      throw new customError(ERROR_MESSAGE.JOB_NOT_FOUND, STATUS_CODE.NOT_FOUND);
-    }
-
-    return jobs;
   },
 
   async getJobById(jobId: string, userId: string) {
