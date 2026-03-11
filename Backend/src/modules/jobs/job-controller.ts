@@ -5,6 +5,7 @@ import { STATUS_CODE } from "../../constants/statusCode";
 import {
   ICreateJobDTO,
   IPublishJobDTO,
+  IQueryParams,
   ISaveAssessmentDTO,
   ISaveInterviewersDTO,
   ISaveJobInfoDTO,
@@ -45,8 +46,21 @@ export const getAllJobs = async (
   try {
     const userId = (req.user as any).id;
 
-    const jobs = await jobServices.getAllJobs(userId);
-    (res as any).result = { data: jobs, message: SUCCESS_MESSAGE.JOBS_FETCHED };
+    const { status, query, page, limit } = req.query as IQueryParams;
+
+    const result = await jobServices.getAllJobs(
+      userId,
+      status || "",
+      query || "",
+      page || "1",
+      limit || "10",
+    );
+
+    (res as any).result = {
+      data: result.jobs,
+      pagination:result.pagination,
+      message: SUCCESS_MESSAGE.JOBS_FETCHED,
+    };
 
     OutputHandler(STATUS_CODE.OK, req, res, next);
   } catch (error) {
@@ -248,6 +262,3 @@ export const deleteJob = async (
     OutputHandler(status, req, res, next);
   }
 };
-
-
-

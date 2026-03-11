@@ -14,8 +14,10 @@ export const OutputHandler = (
     res.status(statusCode).json({
       success: true,
       data: result?.data,
+      ...(result?.pagination && { pagination: result.pagination }),
       message: result?.message || "Request Successfully",
     });
+    return;
   }
 
   const message =

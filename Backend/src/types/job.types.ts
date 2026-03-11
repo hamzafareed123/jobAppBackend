@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Document, Types } from "mongoose";
 
 export interface IPay {
   min?: number;
@@ -33,10 +33,8 @@ export interface IJob {
   descriptionText?: string;
   descriptionFile?: string;
 
- 
   assessmentId?: Types.ObjectId;
   skillIds?: Types.ObjectId[];
-
 
   jobRequirements?: string;
   jobDescription?: string;
@@ -49,8 +47,6 @@ export interface IJob {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
-
 
 export interface ICreateJobDTO {
   jobTitle: string;
@@ -102,4 +98,24 @@ export interface IPublishJobDTO {
   aboutUs?: boolean;
   companyBenefits?: boolean;
   additionalNotes?: string;
+}
+
+export interface IQueryParams {
+  status?: string;
+  query?: string;
+  page?: string;
+  limit?: string;
+}
+
+export interface IPaganation {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+export interface IGetAllJobResponse {
+  jobs: (IJob & Document)[];
+  pagination: IPaganation;
 }
