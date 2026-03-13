@@ -4,6 +4,7 @@ import {
   IResetPasswordBody,
   ISignInBody,
   ISignUpBody,
+  IVerifyOtpBody,
 } from "../../types/user.types";
 import {
   signUpUser,
@@ -13,6 +14,7 @@ import {
   resetPasswordService,
   logoutService,
   refreshTokenService,
+  verifyOtpService
 } from "./auth-services";
 import { SUCCESS_MESSAGE } from "../../constants/successMessages";
 import { OutputHandler } from "../../middleware/outputHandler";
@@ -163,6 +165,29 @@ export const forgotPassword = async (
   }
 };
 
+export const verifyOtp = async (req:Request,res:Response,next:NextFunction)=>{
+  try {
+    const data :IVerifyOtpBody = req.body;
+    const result =await verifyOtpService(data);
+
+      (res as any).result = {
+      data: {resetToken:result.resetToken}, 
+      message: SUCCESS_MESSAGE.OTP_VERIFIED,
+    };
+    OutputHandler(STATUS_CODE.OK, req, res, next);
+
+  } catch (error) {
+       const status =
+      error instanceof Error && "statusCode" in error
+        ? (error as any).statusCode
+        : 500;
+
+    OutputHandler(status, req, res, next);
+  }
+}
+
+
+
 export const resetPassword = async (
   req: Request,
   res: Response,
@@ -188,6 +213,7 @@ export const resetPassword = async (
     OutputHandler(status, req, res, next);
   }
 };
+
 
 export const refreshToken = async (
   req: Request,

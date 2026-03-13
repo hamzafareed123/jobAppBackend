@@ -11,9 +11,10 @@ import {
   saveInterviewers,
   publishJob,
   deleteJob,
+  
 } from "./job-controller";
 import uploadJobDoc from "../../middleware/upload-middleware";
-import { getAllAssessments, getAllSkills } from "./lookup.controller";
+import { getAllAssessments, getAllSkills,getJobType } from "./lookup.controller";
 
 const router = express.Router();
 
@@ -24,6 +25,7 @@ router.post("/", createJob);
 router.get("/", getAllJobs);
 router.get("/skills", getAllSkills);
 router.get("/assessments", getAllAssessments);
+router.get("/jobTypes",getJobType)
 router.get("/:jobId", getJobById);
 router.patch(
   "/:jobId/job-info",

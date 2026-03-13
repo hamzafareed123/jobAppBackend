@@ -22,3 +22,7 @@ export const generateRefreshToken = async (
     sameSite: "lax",
   });
 };
+
+export const generateOtpToken  = (userId:string): string =>{
+  return jwt.sign({userId},ENV.OTP_TOKEN_SECRET,{expiresIn:"15m"})
+}

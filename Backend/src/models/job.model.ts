@@ -13,7 +13,7 @@ export interface IJob extends Document {
   status: "draft" | "active" | "closed" | "archived";
 
   jobTitle: string;
-  jobType: string;
+  jobType: Types.ObjectId;
 
   function?: string;
   role?: string;
@@ -92,7 +92,8 @@ const JobSchema = new Schema<IJob>(
       trim: true,
     },
     jobType: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref:"JobType",
       required: [true, "Job type is required"],
     },
 
