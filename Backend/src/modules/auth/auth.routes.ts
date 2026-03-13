@@ -7,7 +7,8 @@ import {
   getAllUsers,
   forgotPassword,
   resetPassword,
-  refreshToken
+  refreshToken,
+  verifyOtp
 } from "./auth-controller";
 import { validateRequest } from "../../middleware/validation.middleware";
 import {
@@ -15,7 +16,7 @@ import {
   signInSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
-  
+  verifyOtpSchema,
 } from "./auth-validator";
 import { protectedRoute } from "../../middleware/auth.middleware";
 import { roleMiddleware } from "../../middleware/role.middleware";
@@ -35,7 +36,13 @@ router.post(
   forgotPassword,
 );
 
-router.post("/resetPassword",validateRequest(resetPasswordSchema),resetPassword);
-router.post("/refreshToken",refreshToken)
+router.post("/verifyOtp",validateRequest(verifyOtpSchema),verifyOtp)
+
+router.post(
+  "/resetPassword",
+  validateRequest(resetPasswordSchema),
+  resetPassword,
+);
+router.post("/refreshToken", refreshToken);
 
 export default router;

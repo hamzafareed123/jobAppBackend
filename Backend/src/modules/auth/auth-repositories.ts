@@ -40,6 +40,13 @@ export const findUserByOTP = async (otp: string) => {
   });
 };
 
+export const clearUserOtp = async (userId:string)=>{
+
+  return await User.findByIdAndUpdate(userId,{
+    $set:{otp:null,otpExpiry:null}
+  })
+}
+
 export const resetUserPassword = async (
   userId: string,
   hashPassword: string,

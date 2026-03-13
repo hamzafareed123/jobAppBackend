@@ -1,6 +1,5 @@
 import { Job } from "../../models";
 import {
-  IAssessment,
   ICreateJobDTO,
   IGetAllJobResponse,
   IJob,
@@ -16,12 +15,14 @@ export const jobRepository = {
   async createJob(data: ICreateJobDTO, userId: string) {
     const job = await Job.create({
       jobTitle: data.jobTitle,
-      jobType: data.jobType,
+      jobType: new Types.ObjectId(data.jobType),
       createdBy: new Types.ObjectId(userId),
       status: "draft",
     });
 
-    return job;
+    const populateJob = await job.populate("jobType", "name");
+
+    return populateJob;
   },
 
   async getAllJobs(
@@ -53,6 +54,7 @@ export const jobRepository = {
       Job.find(filter)
         .populate("assessmentId", "name")
         .populate("skillIds", "name")
+        .populate("jobType","name")
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limitNum),
@@ -61,7 +63,7 @@ export const jobRepository = {
 
     return {
       jobs,
-       pagination: {
+      pagination: {
         total,
         page: pageNum,
         limit: limitNum,
@@ -78,7 +80,8 @@ export const jobRepository = {
       createdBy: userId,
     })
       .populate("assessmentId", "name")
-      .populate("skillIds", "name");
+      .populate("skillIds", "name")
+      .populate("jobType","name");
   },
 
   async saveJobInfo(data: ISaveJobInfoDTO, jobId: string, userId: string) {

@@ -27,9 +27,13 @@ export interface IForgotPasswordBody{
   email:string
 }
 
+export interface IVerifyOtpBody{
+    otp:string;
+}
+
 export interface IResetPasswordBody{
-  otp:string;
   password:string,
   confirmPassword:string,
+  resetToken:string,
 }
 

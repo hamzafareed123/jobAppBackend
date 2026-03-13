@@ -1,4 +1,5 @@
 import { Document, Types } from "mongoose";
+import { IJobType } from "../models/jobType-model";
 
 export interface IPay {
   min?: number;
@@ -14,7 +15,7 @@ export interface IJob {
   status: "draft" | "active" | "closed" | "archived";
 
   jobTitle: string;
-  jobType: string;
+  jobType: Types.ObjectId | IJobType;
 
   function?: string;
   role?: string;

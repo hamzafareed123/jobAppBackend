@@ -23,6 +23,10 @@ export const jobServices = {
       throw new customError("Job type is required", STATUS_CODE.BAD_REQUEST);
     }
 
+    if(!Types.ObjectId.isValid(data.jobType)){
+      throw new customError("Invalid JOb Type",STATUS_CODE.BAD_REQUEST)
+    }
+
     const job = await jobRepository.createJob(data, userId);
     return job;
   },

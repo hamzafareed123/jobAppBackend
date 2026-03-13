@@ -1,5 +1,4 @@
 import { ERROR_MESSAGE } from "../../constants/errorMessages";
-import { IUserDocument, User } from "../../models/user-models";
 import {
   IAuthResponse,
   IForgotPasswordBody,
@@ -7,6 +6,7 @@ import {
   ISignInBody,
   ISignUpBody,
   IUser,
+  IVerifyOtpBody,
 } from "../../types/user.types";
 import bcrypt from "bcrypt";
 import { mapUser } from "../../utils/mapUser";
@@ -18,10 +18,13 @@ import {
   resetUserPassword,
   findUserByOTP,
   deleteRefreshToken,
+  clearUserOtp,
+  findUserByID,
 } from "./auth-repositories";
 import { customError } from "../../utils/customError";
 import {
   generateAccessToken,
+  generateOtpToken,
   generateRefreshToken,
 } from "../../utils/generateToken";
 import { Response } from "express";
@@ -102,14 +105,8 @@ export const forgotPasswordService = async (
   await sendOTPEmail(email, otp);
 };
 
-export const resetPasswordService = async (
-  data: IResetPasswordBody,
-): Promise<void> => {
-  const { otp, password, confirmPassword } = data;
-
-  if (password !== confirmPassword) {
-    throw new customError("Confirm password Not Match", 400);
-  }
+export const verifyOtpService = async (data: IVerifyOtpBody) => {
+  const { otp } = data;
 
   const user = await findUserByOTP(otp);
 
@@ -117,6 +114,33 @@ export const resetPasswordService = async (
     throw new customError(ERROR_MESSAGE.INVALID_OR_EXPIRED_OTP, 404);
   }
 
+  const resetToken = generateOtpToken(user._id.toString());
+
+  await clearUserOtp(user._id.toString());
+
+  return { resetToken };
+};
+
+export const resetPasswordService = async (
+  data: IResetPasswordBody,
+): Promise<void> => {
+  const { password, confirmPassword, resetToken } = data;
+
+  if (password !== confirmPassword) {
+    throw new customError("Confirm password Not Match", 400);
+  }
+
+  let decode: { userId: string };
+  try {
+    decode = jwt.verify(resetToken, ENV.OTP_TOKEN_SECRET) as { userId: string };
+  } catch (err) {
+    throw new customError(ERROR_MESSAGE.INVALID_TOKEN, 401);
+  }
+
+  const user = await findUserByID(decode.userId);
+  if (!user) {
+    throw new customError(ERROR_MESSAGE.USER_NOT_FOUND, 404);
+  }
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
 
