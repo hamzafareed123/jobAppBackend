@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+
+dotenv.config();
 import express from "express";
 import { ENV } from "./config/env";
 import userRouter from "../src/modules/auth/auth.routes";
@@ -22,11 +25,10 @@ app.use(
   }),
 );
 
-app.use("/files", express.static(path.join(__dirname, "../upload/Job-Files")))
+app.use("/files", express.static(path.join(__dirname, "../upload/Job-Files")));
 
 app.use("/auth", userRouter);
 app.use("/api/jobs", jobRouter);
-
 
 app.use((error: any, req: any, res: any, next: any) => {
   (res as any).error = error;

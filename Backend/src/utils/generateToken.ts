@@ -1,11 +1,17 @@
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 import { Response } from "express";
 import { ENV } from "../config/env";
 import { RefreshToken } from "../models/refreshToken-model";
 
-export const generateAccessToken = (userId: string): string => {
-  return jwt.sign({ userId }, ENV.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
+
+export const generateToken = (
+  userId: string,
+  SECRET_KEY: string,
+  expireTime: SignOptions["expiresIn"],
+): string => {
+  return jwt.sign({ userId }, SECRET_KEY, { expiresIn: expireTime });
 };
+
 
 export const generateRefreshToken = async (
   userId: string,
@@ -20,9 +26,8 @@ export const generateRefreshToken = async (
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     sameSite: "lax",
+    secure:ENV.IS_PRODUCTION
   });
 };
 
-export const generateOtpToken  = (userId:string): string =>{
-  return jwt.sign({userId},ENV.OTP_TOKEN_SECRET,{expiresIn:"15m"})
-}
+

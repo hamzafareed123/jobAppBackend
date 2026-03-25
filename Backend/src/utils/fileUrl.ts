@@ -1,4 +1,3 @@
-import { ENV } from "../config/env";
 import { Request } from "express";
 
 export const generateFileUrl = (filePath: any, req: Request) => {
