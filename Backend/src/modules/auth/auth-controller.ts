@@ -27,6 +27,8 @@ export const SignUp = async (
   res: Response,
   next: NextFunction,
 ) => {
+  
+  
   try {
     const body: ISignUpBody = req.body;
 
@@ -36,13 +38,13 @@ export const SignUp = async (
       message: SUCCESS_MESSAGE.USER_CREATED,
     };
 
-    OutputHandler(201, req, res, next);
+    OutputHandler(STATUS_CODE.CREATED, req, res, next);
   } catch (error) {
     (res as any).error = error;
     const status =
       error instanceof Error && "statusCode" in error
         ? (error as any).statusCode
-        : 500;
+        : STATUS_CODE.INTERNAL_SERVER_ERROR;
 
     OutputHandler(status, req, res, next);
   }
@@ -63,13 +65,13 @@ export const SignIn = async (
       message: SUCCESS_MESSAGE.LOGIN_SUCCESSFUL,
     };
 
-    OutputHandler(200, req, res, next);
+    OutputHandler(STATUS_CODE.OK, req, res, next);
   } catch (error) {
     (res as any).error = error;
     const status =
       error instanceof Error && "statusCode" in error
         ? (error as any).statusCode
-        : 500;
+        : STATUS_CODE.INTERNAL_SERVER_ERROR;
 
     OutputHandler(status, req, res, next);
   }
@@ -84,13 +86,13 @@ export const getAuthUser = async (
     const user = req.user;
 
     (res as any).result = { data: user };
-    OutputHandler(200, req, res, next);
+    OutputHandler(STATUS_CODE.OK, req, res, next);
   } catch (error) {
     (res as any).error = error;
     const status =
       error instanceof Error && "statusCode" in error
         ? (res as any).statusCode
-        : 500;
+        : STATUS_CODE.INTERNAL_SERVER_ERROR;
     OutputHandler(status, req, res, next);
   }
 };
@@ -107,10 +109,10 @@ export const Logout = async (
       data: null,
       message: SUCCESS_MESSAGE.LOGOUT_SUCCESSFUL,
     };
-    OutputHandler(200, req, res, next);
+    OutputHandler(STATUS_CODE.OK, req, res, next);
   } catch (error) {
     (res as any).error = error;
-    const status = 500;
+    const status = STATUS_CODE.INTERNAL_SERVER_ERROR;
     OutputHandler(status, req, res, next);
   }
 };
@@ -124,7 +126,7 @@ export const getAllUsers = async (
     const userId = req.user?.id;
 
     if (!userId) {
-      return next(new customError(ERROR_MESSAGE.USERID_NOT_FOUND, 401));
+      return next(new customError(ERROR_MESSAGE.USERID_NOT_FOUND, STATUS_CODE.UNAUTHORIZED));
     }
 
     const user = await fetchAllUser(userId);
@@ -136,7 +138,7 @@ export const getAllUsers = async (
     const status =
       error instanceof Error && "statusCode" in error
         ? (error as any).statusCode
-        : 500;
+        : STATUS_CODE.INTERNAL_SERVER_ERROR;
 
     OutputHandler(status, req, res, next);
   }
@@ -159,7 +161,7 @@ export const forgotPassword = async (
     const status =
       error instanceof Error && "statusCode" in error
         ? (error as any).statusCode
-        : 500;
+        : STATUS_CODE.INTERNAL_SERVER_ERROR;
 
     OutputHandler(status, req, res, next);
   }
@@ -180,7 +182,7 @@ export const verifyOtp = async (req:Request,res:Response,next:NextFunction)=>{
        const status =
       error instanceof Error && "statusCode" in error
         ? (error as any).statusCode
-        : 500;
+        : STATUS_CODE.INTERNAL_SERVER_ERROR;
 
     OutputHandler(status, req, res, next);
   }
@@ -208,7 +210,7 @@ export const resetPassword = async (
     const status =
       error instanceof Error && "statusCode" in error
         ? (error as any).statusCode
-        : 500;
+        : STATUS_CODE.INTERNAL_SERVER_ERROR;
 
     OutputHandler(status, req, res, next);
   }
@@ -235,7 +237,7 @@ export const refreshToken = async (
     const status =
       error instanceof Error && "statusCode" in error
         ? (error as any).statusCode
-        : 500;
+        : STATUS_CODE.INTERNAL_SERVER_ERROR;
 
     OutputHandler(status, req, res, next);
   }

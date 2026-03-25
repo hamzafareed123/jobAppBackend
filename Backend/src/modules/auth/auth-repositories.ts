@@ -3,6 +3,7 @@ import { RefreshToken } from "../../models/refreshToken-model";
 import { User } from "../../models/user-models";
 import { ISignUpBody } from "../../types/user.types";
 import crypto from "crypto";
+import mongoose from "mongoose";
 
 export const findUserByEmail = async (email: string) => {
   return await User.findOne({ email });
@@ -40,12 +41,11 @@ export const findUserByOTP = async (otp: string) => {
   });
 };
 
-export const clearUserOtp = async (userId:string)=>{
-
-  return await User.findByIdAndUpdate(userId,{
-    $set:{otp:null,otpExpiry:null}
-  })
-}
+export const clearUserOtp = async (userId: string) => {
+  return await User.findByIdAndUpdate(userId, {
+    $set: { otp: null, otpExpiry: null },
+  });
+};
 
 export const resetUserPassword = async (
   userId: string,

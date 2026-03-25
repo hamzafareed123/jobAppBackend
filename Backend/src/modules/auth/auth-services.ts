@@ -23,15 +23,16 @@ import {
 } from "./auth-repositories";
 import { customError } from "../../utils/customError";
 import {
-  generateAccessToken,
-  generateOtpToken,
+
   generateRefreshToken,
+  generateToken,
 } from "../../utils/generateToken";
 import { Response } from "express";
 import { sendOTPEmail } from "../../email/sendEmail";
 import jwt from "jsonwebtoken";
 import { ENV } from "../../config/env";
 import { findRefreshToken } from "./auth-repositories";
+import { STATUS_CODE } from "../../constants/statusCode";
 
 export const signUpUser = async (
   body: ISignUpBody,
@@ -42,7 +43,7 @@ export const signUpUser = async (
   const existingUser = await findUserByEmail(email);
 
   if (existingUser) {
-    throw new customError(ERROR_MESSAGE.USER_ALREADY_EXIST, 409);
+    throw new customError(ERROR_MESSAGE.USER_ALREADY_EXIST, STATUS_CODE.CONFLICT);
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -54,7 +55,11 @@ export const signUpUser = async (
     password: hashPassword,
   });
 
-  const accessToken = generateAccessToken(newUser._id.toString());
+  const accessToken = generateToken(
+    newUser._id.toString(),
+    ENV.ACCESS_TOKEN_SECRET,
+    "15m",
+  );
 
   await generateRefreshToken(newUser._id.toString(), res);
   return { accessToken, user: mapUser(newUser) };
@@ -65,16 +70,17 @@ export const signInUser = async (body: ISignInBody, res: Response) => {
 
   const user = await findUserByEmail(email);
   if (!user) {
-    throw new customError(ERROR_MESSAGE.INVALID_CREDENTIALS, 401);
+    throw new customError(ERROR_MESSAGE.INVALID_CREDENTIALS, STATUS_CODE.UNAUTHORIZED);
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
-    throw new customError(ERROR_MESSAGE.INVALID_CREDENTIALS, 401);
+    throw new customError(ERROR_MESSAGE.INVALID_CREDENTIALS, STATUS_CODE.UNAUTHORIZED);
   }
 
-  const accessToken = generateAccessToken(user._id.toString());
+ 
+  const accessToken = generateToken(user._id.toString(),ENV.ACCESS_TOKEN_SECRET,"15m")
   await generateRefreshToken(user._id.toString(), res);
 
   return { accessToken, user: mapUser(user) };
@@ -84,7 +90,7 @@ export const fetchAllUser = async (userId: string): Promise<IUser[]> => {
   const allUsers = await findAllUser(userId);
 
   if (!allUsers || allUsers.length === 0) {
-    throw new customError(ERROR_MESSAGE.USER_NOT_FOUND, 404);
+    throw new customError(ERROR_MESSAGE.USER_NOT_FOUND, STATUS_CODE.NOT_FOUND);
   }
 
   return allUsers.map((user) => mapUser(user));
@@ -98,7 +104,7 @@ export const forgotPasswordService = async (
   const user = await findUserByEmail(email);
 
   if (!user) {
-    throw new customError(ERROR_MESSAGE.USER_NOT_FOUND, 404);
+    throw new customError(ERROR_MESSAGE.USER_NOT_FOUND, STATUS_CODE.NOT_FOUND);
   }
 
   const otp = await saveUserOTP(email);
@@ -111,10 +117,11 @@ export const verifyOtpService = async (data: IVerifyOtpBody) => {
   const user = await findUserByOTP(otp);
 
   if (!user) {
-    throw new customError(ERROR_MESSAGE.INVALID_OR_EXPIRED_OTP, 404);
+    throw new customError(ERROR_MESSAGE.INVALID_OR_EXPIRED_OTP, STATUS_CODE.NOT_FOUND);
   }
 
-  const resetToken = generateOtpToken(user._id.toString());
+  
+  const resetToken = generateToken(user._id.toString(),ENV.OTP_TOKEN_SECRET,"15m")
 
   await clearUserOtp(user._id.toString());
 
@@ -127,19 +134,19 @@ export const resetPasswordService = async (
   const { password, confirmPassword, resetToken } = data;
 
   if (password !== confirmPassword) {
-    throw new customError("Confirm password Not Match", 400);
+    throw new customError("Confirm password Not Match", STATUS_CODE.BAD_REQUEST);
   }
 
   let decode: { userId: string };
   try {
     decode = jwt.verify(resetToken, ENV.OTP_TOKEN_SECRET) as { userId: string };
   } catch (err) {
-    throw new customError(ERROR_MESSAGE.INVALID_TOKEN, 401);
+    throw new customError(ERROR_MESSAGE.INVALID_TOKEN, STATUS_CODE.UNAUTHORIZED);
   }
 
   const user = await findUserByID(decode.userId);
   if (!user) {
-    throw new customError(ERROR_MESSAGE.USER_NOT_FOUND, 404);
+    throw new customError(ERROR_MESSAGE.USER_NOT_FOUND, STATUS_CODE.NOT_FOUND);
   }
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
@@ -151,18 +158,22 @@ export const refreshTokenService = async (
   token: string,
 ): Promise<{ accessToken: string }> => {
   if (!token) {
-    throw new customError(ERROR_MESSAGE.NO_TOKEN_FOUND, 401);
+    throw new customError(ERROR_MESSAGE.NO_TOKEN_FOUND, STATUS_CODE.UNAUTHORIZED);
   }
 
-  const decode = jwt.verify(token, ENV.REFRESH_TOKEN_SECRET) as {
-    userId: string;
-  };
-  if (!decode) throw new customError(ERROR_MESSAGE.NO_TOKEN_FOUND, 401);
+  let decode : {userId:string};
+
+  try {
+    decode = jwt.verify(token,ENV.REFRESH_TOKEN_SECRET) as {userId:string}
+  } catch  {
+    throw new customError(ERROR_MESSAGE.NO_TOKEN_FOUND,STATUS_CODE.UNAUTHORIZED)
+  }
 
   const storedToken = await findRefreshToken(token);
-  if (!storedToken) throw new customError("Invalid Refresh Token", 401);
+  if (!storedToken) throw new customError("Invalid Refresh Token", STATUS_CODE.UNAUTHORIZED);
 
-  const accessToken = generateAccessToken(decode.userId);
+ 
+  const accessToken = generateToken(decode.userId,ENV.ACCESS_TOKEN_SECRET,"15m")
   return { accessToken };
 };
 

@@ -11,7 +11,6 @@ import {
   saveInterviewers,
   publishJob,
   deleteJob,
-  
 } from "./job-controller";
 import uploadJobDoc from "../../middleware/upload-middleware";
 import { getAllAssessments, getAllSkills,getJobType } from "./lookup.controller";

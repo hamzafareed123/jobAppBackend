@@ -7,7 +7,7 @@ export const sendOTPEmail = async (
   otp: string,
 ): Promise<void> => {
   await transporter.sendMail({
-    from: `moccy APP <${ENV.GMAIL_USER}>`,
+    from: `moccy <${ENV.GMAIL_USER}>`,
     to: toEmail,
     subject: "Password Reset OTP",
     html: otpEmailTemplate(otp),
