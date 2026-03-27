@@ -54,7 +54,7 @@ export const jobRepository = {
       Job.find(filter)
         .populate("assessmentId", "name")
         .populate("skillIds", "name")
-        .populate("jobType","name")
+        .populate("jobType", "name")
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limitNum),
@@ -81,7 +81,7 @@ export const jobRepository = {
     })
       .populate("assessmentId", "name")
       .populate("skillIds", "name")
-      .populate("jobType","name");
+      .populate("jobType", "name");
   },
 
   async saveJobInfo(data: ISaveJobInfoDTO, jobId: string, userId: string) {

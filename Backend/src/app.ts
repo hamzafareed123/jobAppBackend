@@ -5,6 +5,7 @@ import express from "express";
 import { ENV } from "./config/env";
 import userRouter from "../src/modules/auth/auth.routes";
 import jobRouter from "../src/modules/jobs/job-route";
+import candidateRouter from "../src/modules/candidates/candidates-route";
 import { dbConnect } from "./config/db";
 import { OutputHandler } from "./middleware/outputHandler";
 import cookieParser from "cookie-parser";
@@ -29,6 +30,7 @@ app.use("/files", express.static(path.join(__dirname, "../upload/Job-Files")));
 
 app.use("/auth", userRouter);
 app.use("/api/jobs", jobRouter);
+app.use("/api/candidate",candidateRouter)
 
 app.use((error: any, req: any, res: any, next: any) => {
   (res as any).error = error;

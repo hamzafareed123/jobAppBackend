@@ -1,6 +1,6 @@
 export const ERROR_MESSAGE = {
+  
   //auth
-
   USER_NOT_FOUND: "User Not Found",
   USER_ALREADY_EXIST: "User already exist with this email",
   SERVER_ERROR: "Server Error",
@@ -16,6 +16,10 @@ export const ERROR_MESSAGE = {
 
 
   // job
-
   JOB_NOT_FOUND: "No Job Exist",
+
+
+  // candidate
+  JOB_NOT_ACTIVE:"Job is Not Active",
+  CANDIDATE_NOT_FOUND:"Candidate Not Found"
 };
