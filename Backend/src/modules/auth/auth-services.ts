@@ -80,7 +80,7 @@ export const signInUser = async (body: ISignInBody, res: Response) => {
   }
 
  
-  const accessToken = generateToken(user._id.toString(),ENV.ACCESS_TOKEN_SECRET,"15m")
+  const accessToken = generateToken(user._id.toString(),ENV.ACCESS_TOKEN_SECRET,"35m")
   await generateRefreshToken(user._id.toString(), res);
 
   return { accessToken, user: mapUser(user) };
