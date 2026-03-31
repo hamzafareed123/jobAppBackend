@@ -56,18 +56,57 @@ export const candidateRepository = {
 
     return application;
   },
+  async getCandidates(
+    jobId: string,
+    stage: string,
+    status: string,
+    search: string,
+  ) {
+    const matchStage: any = { jobId: new Types.ObjectId(jobId) };
 
-  async getCandidates(jobId: string) {
-    const candidates = await Candidate.find({ jobId })
-      .populate("userId", "fullName")
-      .populate("jobId", "jobTitle");
+    if (stage) matchStage.stage = stage;
+    if (status) matchStage.status = status;
 
+    const pipeline: any[] = [
+      { $match: matchStage },
+
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userId",
+        },
+      },
+
+      { $unwind: { path: "$userId", preserveNullAndEmptyArrays: true } },
+
+      ...(search
+        ? [{ $match: { "userId.fullName": { $regex: search, $options: "i" } } }]
+        : []),
+
+      {
+        $project: {
+          stage: 1,
+          status: 1,
+          "userId._id": 1,
+          "userId.fullName": 1,
+          "userId.email": 1,
+          appliedAt: 1,
+          createdAt: 1,
+        },
+      },
+    ];
+
+    const filteredCandidates = await Candidate.aggregate(pipeline);
+
+    // Group by stage
     const grouped = {
-      Applied: candidates.filter((c) => c.stage === "Applied"),
-      Shortlisted: candidates.filter((c) => c.stage === "Shortlisted"),
-      Offered: candidates.filter((c) => c.stage === "Offered"),
-      Hired: candidates.filter((c) => c.stage === "Hired"),
-      "Not Moving Forward": candidates.filter(
+      Applied: filteredCandidates.filter((c) => c.stage === "Applied"),
+      Shortlisted: filteredCandidates.filter((c) => c.stage === "Shortlisted"),
+      Offered: filteredCandidates.filter((c) => c.stage === "Offered"),
+      Hired: filteredCandidates.filter((c) => c.stage === "Hired"),
+      "Not Moving Forward": filteredCandidates.filter(
         (c) => c.stage === "Not Moving Forward",
       ),
     };

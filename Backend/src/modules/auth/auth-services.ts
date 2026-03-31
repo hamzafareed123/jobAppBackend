@@ -49,11 +49,14 @@ export const signUpUser = async (
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
 
+    console.log("Saving user...");
   const newUser = await createUser({
     fullName,
     email,
     password: hashPassword,
   });
+
+  console.log("save user", newUser)
 
   const accessToken = generateToken(
     newUser._id.toString(),

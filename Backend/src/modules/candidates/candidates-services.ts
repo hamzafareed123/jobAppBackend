@@ -15,12 +15,12 @@ export const candidateServices = {
 
     return application;
   },
-  async getCandidates(jobId: string) {
+  async getCandidates(jobId: string,stage:string,status:string,search:string) {
     if (!Types.ObjectId.isValid(jobId)) {
       throw new customError(ERROR_MESSAGE.JOB_NOT_FOUND, STATUS_CODE.NOT_FOUND);
     }
 
-    const candidates = await candidateRepository.getCandidates(jobId);
+    const candidates = await candidateRepository.getCandidates(jobId,stage,status,search);
 
     if (!candidates) {
       throw new customError(ERROR_MESSAGE.JOB_NOT_FOUND, STATUS_CODE.NOT_FOUND);

@@ -158,7 +158,7 @@ export const jobRepository = {
       { new: true },
     );
   },
-  async deletJob(jobId: string, userId: string) {
+  async deleteJob(jobId: string, userId: string) {
     return await Job.findOneAndDelete({ _id: jobId, createdBy: userId });
   },
 };
