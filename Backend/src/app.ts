@@ -1,6 +1,4 @@
-import dotenv from "dotenv";
-
-dotenv.config();
+import "./config/config";
 import express from "express";
 import { ENV } from "./config/env";
 import userRouter from "../src/modules/auth/auth.routes";

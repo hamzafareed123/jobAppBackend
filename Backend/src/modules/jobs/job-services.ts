@@ -163,7 +163,7 @@ export const jobServices = {
     }
 
 
-    const job = await jobRepository.deletJob(jobId, userId);
+    const job = await jobRepository.deleteJob(jobId, userId);
 
     if (!job) {
       throw new customError(ERROR_MESSAGE.JOB_NOT_FOUND, STATUS_CODE.NOT_FOUND);

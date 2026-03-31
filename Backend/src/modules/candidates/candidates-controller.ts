@@ -2,8 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { OutputHandler } from "../../middleware/outputHandler";
 import { STATUS_CODE } from "../../constants/statusCode";
 import { candidateServices } from "./candidates-services";
-import Candidate from "../../models/candidate-model";
-import { IMovingStageDTO, IQualifyDTO } from "../../types/candidates.types";
+import { ICandidateQueryParams, IMovingStageDTO, IQualifyDTO } from "../../types/candidates.types";
 
 export const applyJob = async (
   req: Request,
@@ -38,7 +37,10 @@ export const getCandidates = async (
   try {
     const jobId = req.params.jobId as string;
 
-    const application = await candidateServices.getCandidates(jobId);
+    const {stage,status,search} = req.query as ICandidateQueryParams;
+
+
+    const application = await candidateServices.getCandidates(jobId,stage || "",status || "",search ||"");
 
     (res as any).result = {
       data: application,
