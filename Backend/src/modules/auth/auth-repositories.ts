@@ -3,7 +3,6 @@ import { RefreshToken } from "../../models/refreshToken-model";
 import { User } from "../../models/user-models";
 import { ISignUpBody } from "../../types/user.types";
 import crypto from "crypto";
-import mongoose from "mongoose";
 
 export const findUserByEmail = async (email: string) => {
   return await User.findOne({ email });

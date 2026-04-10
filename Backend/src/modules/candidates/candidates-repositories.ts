@@ -10,12 +10,12 @@ export const candidateRepository = {
   async applyJob(jobId: string, userId: string) {
     const job = await Job.findById(jobId);
 
-    // check if job exit
+  
     if (!job) {
       throw new customError(ERROR_MESSAGE.JOB_NOT_FOUND, STATUS_CODE.NOT_FOUND);
     }
 
-    // check status is active or draft
+  
 
     if (job.status === "draft") {
       throw new customError(
@@ -24,7 +24,6 @@ export const candidateRepository = {
       );
     }
 
-    // check job creator is applying his own job
     if (job.createdBy.toString() === userId) {
       throw new customError(
         "You can't apply you own Job",
@@ -32,7 +31,7 @@ export const candidateRepository = {
       );
     }
 
-    // check candidate already applied
+    
 
     const existingCandidate = await Candidate.findOne({
       jobId: new Types.ObjectId(jobId),
@@ -50,7 +49,7 @@ export const candidateRepository = {
       jobId: new Types.ObjectId(jobId),
       userId: new Types.ObjectId(userId),
       stage: "Applied",
-      status: "pending",
+      status: "qualified",
       appliedAt: new Date(),
     });
 
@@ -100,7 +99,7 @@ export const candidateRepository = {
 
     const filteredCandidates = await Candidate.aggregate(pipeline);
 
-    // Group by stage
+    
     const grouped = {
       Applied: filteredCandidates.filter((c) => c.stage === "Applied"),
       Shortlisted: filteredCandidates.filter((c) => c.stage === "Shortlisted"),
@@ -119,7 +118,7 @@ export const candidateRepository = {
       { _id: candidateId, jobId },
       { $set: { stage: data.stage } },
       { new: true },
-    );
+    ).populate("userId","fullName email");
   },
 
   async qualifyCandidate(
