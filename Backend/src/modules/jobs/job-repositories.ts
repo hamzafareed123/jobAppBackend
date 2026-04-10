@@ -84,6 +84,10 @@ export const jobRepository = {
       .populate("jobType", "name");
   },
 
+  async getJobOnlyById(jobId:string){
+    return await Job.findById(jobId);
+  } ,
+
   async saveJobInfo(data: ISaveJobInfoDTO, jobId: string, userId: string) {
     return await Job.findOneAndUpdate(
       { _id: jobId, createdBy: userId },

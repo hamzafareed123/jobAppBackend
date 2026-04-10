@@ -28,7 +28,7 @@ import {
   generateToken,
 } from "../../utils/generateToken";
 import { Response } from "express";
-import { sendOTPEmail } from "../../email/sendEmail";
+import { sendOTPEmail } from "../../email/sendOTPEmail";
 import jwt from "jsonwebtoken";
 import { ENV } from "../../config/env";
 import { findRefreshToken } from "./auth-repositories";
@@ -49,14 +49,14 @@ export const signUpUser = async (
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
 
-    console.log("Saving user...");
+  
   const newUser = await createUser({
     fullName,
     email,
     password: hashPassword,
   });
 
-  console.log("save user", newUser)
+ 
 
   const accessToken = generateToken(
     newUser._id.toString(),

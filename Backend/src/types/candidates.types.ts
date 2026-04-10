@@ -19,6 +19,10 @@ export interface IPosition {
 
 export interface IMovingStageDTO {
   stage: Stage;
+  email?:{
+    subject:string,
+    body:string,
+  }
 }
 
 export interface IQualifyDTO {
