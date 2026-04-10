@@ -20,8 +20,6 @@ export const protectedRoute = async (
   next: NextFunction,
 ) => {
   try {
-  
-
     const authHeader = req.headers.authorization;
 
     const token = authHeader && authHeader.split(" ")[1];
@@ -30,7 +28,9 @@ export const protectedRoute = async (
       return next(new customError(ERROR_MESSAGE.NO_TOKEN_FOUND, 401));
     }
 
-    const decode = jwt.verify(token, ENV.ACCESS_TOKEN_SECRET) as { userId: string };
+    const decode = jwt.verify(token, ENV.ACCESS_TOKEN_SECRET) as {
+      userId: string;
+    };
     const user = await findUserByID(decode.userId);
 
     if (!user) {
