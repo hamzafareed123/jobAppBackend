@@ -5,8 +5,8 @@ import { STATUS_CODE } from "../../constants/statusCode";
 import { candidateRepository } from "./candidates-repositories";
 import { IMovingStageDTO, IQualifyDTO } from "../../types/candidates.types";
 import { sendCandidateEmail } from "../../email/sendCandidateEmail";
-import { findUserByID } from "../auth/auth-repositories";
 import { jobRepository } from "../jobs/job-repositories";
+import Candidate from "../../models/candidate-model";
 
 export const candidateServices = {
   async applyJob(jobId: string, userId: string) {
@@ -53,14 +53,6 @@ export const candidateServices = {
       );
     }
 
-    const candidateInfo = await findUserByID(candidateId);
-    if (!candidateInfo) {
-      throw new customError(
-        ERROR_MESSAGE.CANDIDATE_NOT_FOUND,
-        STATUS_CODE.NOT_FOUND,
-      );
-    }
-
     const job = await jobRepository.getJobOnlyById(jobId.toString());
 
     if (!job) {
@@ -72,6 +64,12 @@ export const candidateServices = {
       candidateId,
       data,
     );
+    if (!candidate) {
+      throw new customError(
+        ERROR_MESSAGE.CANDIDATE_NOT_FOUND,
+        STATUS_CODE.NOT_FOUND,
+      );
+    }
 
     if (candidate && data?.email?.subject && data?.email?.body) {
       const user = candidate.userId as any;
