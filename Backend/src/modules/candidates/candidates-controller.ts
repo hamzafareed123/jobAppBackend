@@ -71,6 +71,7 @@ export const moveStage = async (
 
     const body: IMovingStageDTO = req.body;
 
+    console.log(body)
    
 
     const candidate = await candidateServices.moveStage(
