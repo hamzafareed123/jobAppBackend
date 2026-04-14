@@ -46,6 +46,6 @@ const CandidateSchema = new Schema<ICandidate>({
 
 CandidateSchema.index({jobId:1,userId:1},{unique:true})
 
-
-const Candidate = mongoose.model<ICandidate>("Position",CandidateSchema)
+// Check if model already exists to prevent overwrite during hot reload
+const Candidate = mongoose.models.Candidate || mongoose.model<ICandidate>("Candidate", CandidateSchema)
 export default Candidate
