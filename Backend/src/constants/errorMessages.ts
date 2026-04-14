@@ -1,5 +1,4 @@
 export const ERROR_MESSAGE = {
-  
   //auth
   USER_NOT_FOUND: "User Not Found",
   USER_ALREADY_EXIST: "User already exist with this email",
@@ -14,12 +13,14 @@ export const ERROR_MESSAGE = {
   TOO_MANY_REQUEST: "Too many requests, please try again later",
   INVALID_OR_EXPIRED_OTP: "Invalid or expired OTP",
 
-
   // job
   JOB_NOT_FOUND: "No Job Exist",
 
-
   // candidate
-  JOB_NOT_ACTIVE:"Job is Not Active",
-  CANDIDATE_NOT_FOUND:"Candidate Not Found"
+  JOB_NOT_ACTIVE: "Job is Not Active",
+  CANDIDATE_NOT_FOUND: "Candidate Not Found",
+
+  // position
+  POSITION_NOT_FOUND: "Position Not Found",
+  REQUIRED_FIELDS_MISSING: "Required fields are missing",
 };

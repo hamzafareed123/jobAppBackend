@@ -1,11 +1,11 @@
-import { Document, Types } from "mongoose";
+import { Types } from "mongoose";
 export type Stage =
   | "Applied"
   | "Shortlisted"
   | "Offered"
   | "Hired"
   | "Not Moving Forward";
-export type QualifyStatus = "qualified" | "disqualified" ;
+export type QualifyStatus = "qualified" | "disqualified";
 
 export interface IPosition {
   jobId: Types.ObjectId;
@@ -19,10 +19,10 @@ export interface IPosition {
 
 export interface IMovingStageDTO {
   stage: Stage;
-  email?:{
-    subject:string,
-    body:string,
-  }
+  email?: {
+    subject: string;
+    body: string;
+  };
 }
 
 export interface IQualifyDTO {

@@ -10,4 +10,12 @@ export const SUCCESS_MESSAGE = {
   // jobs
   JOBS_FETCHED: "Jobs Fetched successfully",
   JOB_FETCHED: "Job Fetched successfully",
+
+  // position
+
+  POSITION_CREATED:"Position Created Successfully",
+  POSITION_UPDATED:"Position Updated Successfully",
+  POSITION_DELETED:"Position Deleted Successfully",
+  POSITION_NOT_FOUND:"Position Not Found",
+  POSITION_FETCHED:"Position Fetched Successfully"
 };
