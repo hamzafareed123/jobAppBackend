@@ -34,3 +34,4 @@ export interface ICandidateQueryParams {
   status?: QualifyStatus;
   search?: string;
 }
+
