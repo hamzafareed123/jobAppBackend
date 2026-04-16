@@ -1,4 +1,5 @@
-import { Types } from "mongoose";
+import { Document, Types } from "mongoose";
+import { IPaganation } from "./job.types";
 
 export type PositionStatus = "live" | "filed" | "closed";
 
@@ -32,7 +33,21 @@ export interface IUpdatePositionDTO {
 }
 
 export interface IPositionQueryParams {
-  search?: string;
+  query?: string;
+  page?:string;
+  limit?:string;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
+}
+
+
+
+export interface IGETALLPOSITIONRESPONSE{
+  position:(IPosition & Document)[];
+  pagination:IPaganation
+}
+
+
+export interface IUpdateStatusDTO{
+  status:PositionStatus
 }

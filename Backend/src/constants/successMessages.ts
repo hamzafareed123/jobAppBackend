@@ -17,5 +17,6 @@ export const SUCCESS_MESSAGE = {
   POSITION_UPDATED:"Position Updated Successfully",
   POSITION_DELETED:"Position Deleted Successfully",
   POSITION_NOT_FOUND:"Position Not Found",
-  POSITION_FETCHED:"Position Fetched Successfully"
+  POSITION_FETCHED:"Position Fetched Successfully",
+  POSITION_STATUS_UPDATED:"Position Status Updated Successfully"
 };
