@@ -23,4 +23,11 @@ export const ERROR_MESSAGE = {
   // position
   POSITION_NOT_FOUND: "Position Not Found",
   REQUIRED_FIELDS_MISSING: "Required fields are missing",
+
+  // event 
+  EVENT_NOT_FOUND: "Event Not Found",
+  EVENT_CREATION_FAILED: "Failed to create event",
+  EVENT_UPDATE_FAILED: "Failed to update event",
+  EVENT_DELETION_FAILED: "Failed to delete event"
+
 };

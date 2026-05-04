@@ -18,5 +18,14 @@ export const SUCCESS_MESSAGE = {
   POSITION_DELETED:"Position Deleted Successfully",
   POSITION_NOT_FOUND:"Position Not Found",
   POSITION_FETCHED:"Position Fetched Successfully",
-  POSITION_STATUS_UPDATED:"Position Status Updated Successfully"
+  POSITION_STATUS_UPDATED:"Position Status Updated Successfully",
+
+  // event 
+
+  EVENT_CREATED:"Event Created Successfully",
+  EVENT_UPDATED:"Event Updated Successfully",
+  EVENT_DELETED:"Event Deleted Successfully",
+  EVENT_NOT_FOUND:"Event Not Found",
+  EVENT_FETCHED:"Event Fetched Successfully"
+
 };

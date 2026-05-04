@@ -6,6 +6,7 @@ import jobRouter from "../src/modules/jobs/job-route";
 import candidateRouter from "../src/modules/candidates/candidates-route";
 import dashboaredRouter from "../src/modules/dashboard/dashboard-route";
 import positionRouter from "../src/modules/positions/position-route";
+import eventRouter from "../src/modules/events/events-route";
 import { dbConnect } from "./config/db";
 import { OutputHandler } from "./middleware/outputHandler";
 import cookieParser from "cookie-parser";
@@ -33,6 +34,9 @@ app.use("/api/jobs", jobRouter);
 app.use("/api/candidate", candidateRouter);
 app.use("/api/dashboard", dashboaredRouter);
 app.use("/api/position",positionRouter);
+app.use("/api/events",eventRouter);
+
+
 
 app.use((error: any, req: any, res: any, next: any) => {
   (res as any).error = error;

@@ -1,0 +1,1 @@
+{"version":3,"file":"jobInterviewer.model.d.ts","sourceRoot":"","sources":["../../src/models/jobInterviewer.model.ts"],"names":[],"mappings":"AAAA,OAAO,QAAQ,EAAE,EAAE,QAAQ,EAAU,KAAK,EAAE,MAAM,UAAU,CAAC;AAG7D,MAAM,WAAW,eAAgB,SAAQ,QAAQ;IAC/C,KAAK,EAAE,KAAK,CAAC,QAAQ,CAAC;IACtB,MAAM,EAAE,KAAK,CAAC,QAAQ,CAAC;IACvB,IAAI,EAAE,WAAW,GAAG,gBAAgB,CAAC;CACtC;;;;;;;;AAwBD,wBAGE"}

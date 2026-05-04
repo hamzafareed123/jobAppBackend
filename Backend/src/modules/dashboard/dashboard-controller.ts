@@ -10,7 +10,7 @@ export const getDashboardData = async (
 ) => {
   try {
     const userId = (req.user as any).id;
-    console.log("User id is", userId);
+
 
     const dashboardStats = await DashboardServices.getDashboardData(userId);
 
