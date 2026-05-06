@@ -14,6 +14,25 @@ export const candidateServices = {
       throw new customError(ERROR_MESSAGE.JOB_NOT_FOUND, STATUS_CODE.NOT_FOUND);
     }
 
+    const job = await jobRepository.getJobOnlyById(jobId);
+    if (!job) {
+      throw new customError(ERROR_MESSAGE.JOB_NOT_FOUND, STATUS_CODE.NOT_FOUND);
+    }
+
+    if (job.status === "draft") {
+      throw new customError(
+        ERROR_MESSAGE.JOB_NOT_ACTIVE,
+        STATUS_CODE.BAD_REQUEST,
+      );
+    }
+
+    if (job.createdBy.toString() === userId) {
+      throw new customError(
+        "You can't apply you own Job",
+        STATUS_CODE.BAD_REQUEST,
+      );
+    }
+
     const application = await candidateRepository.applyJob(jobId, userId);
 
     return application;

@@ -8,31 +8,6 @@ import { IMovingStageDTO, IQualifyDTO } from "../../types/candidates.types";
 
 export const candidateRepository = {
   async applyJob(jobId: string, userId: string) {
-    const job = await Job.findById(jobId);
-
-  
-    if (!job) {
-      throw new customError(ERROR_MESSAGE.JOB_NOT_FOUND, STATUS_CODE.NOT_FOUND);
-    }
-
-  
-
-    if (job.status === "draft") {
-      throw new customError(
-        ERROR_MESSAGE.JOB_NOT_ACTIVE,
-        STATUS_CODE.BAD_REQUEST,
-      );
-    }
-
-    if (job.createdBy.toString() === userId) {
-      throw new customError(
-        "You can't apply you own Job",
-        STATUS_CODE.BAD_REQUEST,
-      );
-    }
-
-    
-
     const existingCandidate = await Candidate.findOne({
       jobId: new Types.ObjectId(jobId),
       userId: new Types.ObjectId(userId),
@@ -99,7 +74,6 @@ export const candidateRepository = {
 
     const filteredCandidates = await Candidate.aggregate(pipeline);
 
-    
     const grouped = {
       Applied: filteredCandidates.filter((c) => c.stage === "Applied"),
       Shortlisted: filteredCandidates.filter((c) => c.stage === "Shortlisted"),
@@ -118,7 +92,7 @@ export const candidateRepository = {
       { _id: candidateId, jobId },
       { $set: { stage: data.stage } },
       { new: true },
-    ).populate("userId","fullName email");
+    ).populate("userId", "fullName email");
   },
 
   async qualifyCandidate(
