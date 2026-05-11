@@ -28,6 +28,7 @@ export const ERROR_MESSAGE = {
   EVENT_NOT_FOUND: "Event Not Found",
   EVENT_CREATION_FAILED: "Failed to create event",
   EVENT_UPDATE_FAILED: "Failed to update event",
-  EVENT_DELETION_FAILED: "Failed to delete event"
+  EVENT_DELETION_FAILED: "Failed to delete event",
+  TIME_CONFLICT:"Start time must be before end time",
 
 };
